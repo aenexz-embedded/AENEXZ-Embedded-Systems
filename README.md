@@ -42,7 +42,11 @@ Do this once, the first time you contribute.
    git remote add upstream https://github.com/aenexz-embedded/AENEXZ-Embedded-Systems.git
    ```
 
-4. **Switch to the batch branch:**
+4. **Fetch Branches from Upstream**
+   ```bash
+   git fetch upstream
+   ```
+5. **Switch to the batch branch:**
    ```bash
    git checkout batch/july-2026
    ```
