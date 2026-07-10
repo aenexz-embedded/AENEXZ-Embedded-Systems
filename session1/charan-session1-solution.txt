@@ -1,0 +1,31 @@
+1. RCC->APB2ENR - what does this register do?
+A: APB2ENR is a register of the RCC peripheral which enables the APB2 bus.
+
+2. GPIOC->CRH: What is GPIOC? Why is it divided to CRH/CRL?
+A: GPIOC denotes the register family of the GPIO Port C. All registers under this correspond to configuring and manipulating the PORT C GPIO Pins.
+  CRH/CRL denotes Configuration Registers High and Configuration Registers Low, where CRL configures the GPIO pins 0-7 and CRH configures 8-15. 
+  The reason for splitting into 2 parts is that each pin requries 4bits for configuration and each GPIO Port consists of 16 pins. so a total of 64 bits is
+  required for configuration of all PINs in a PORT. But, since in STM32, the WORD size is only 32bit, only 8 pins can be configured in a single register. 
+
+3. GPIOC->ODR - what does this represent?
+A. ODR means Output Data Register of GPIOC ports. this register is used to contorl the PINs configured as OUTPUT in GPIO Port C.
+
+
+
+// Set bit at pos n of a register REG
+REG |= (1 << n);
+
+// Clear bit at pos n of a register REG
+//Your Answer
+REG &= ~(1 << n)
+
+// Toggle bit at pos n of a register REG
+//Your Answer
+REG ^= (1 << n)
+  
+// Read bit at pos n of a register REG
+//Your Answer
+if(REG & (1 << n))
+{
+  //If the bit is 1, this statement will be executed.
+}
