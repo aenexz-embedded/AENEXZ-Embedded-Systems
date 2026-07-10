@@ -1,0 +1,30 @@
+RCC  : Reset Clock Control
+
+to clear a bit : REG &= ~(1<<n);
+
+to toggle a bit : REG ^=(1<<n);
+
+to read a bit : num=1;
+                REG = (num & (1<<n));
+
+//if REG ==1,then n=1 else n=0 (read a bit is 0 or 1)
+
+ENR : Enable register 
+apb bus : connects low speed peripherals like gpio ,timer ,I2C,UART and SPI peripherals to the CPU
+
+we use RCC-->apb2ENR  to enable/wake up peripherals connected to this bus i.e to start clk to other Peripherals
+
+
+
+ GPIOC : general purpose I/p, O/p pins in port C
+what is port ?
+ports are used to connect the registers with peripherals 
+ 
+each port --> 16 pins ( 8 high , 8 low)
+CRL= controls 8 low pins
+CRH= controls 8 high  pins
+
+why?
+must know wheather the pin is output or input , to store this info , 4bits required for each pin , => 4 bits for 16 pins(8 low,8 high)=64 bits totally but stm32 = 32bit architecture , size of register =32bit (store only 32 bits a time) ==>so 32 bits for CRH and  32 bits for CRL
+
+ODR: Output data register , used to set or clear a pin or an entire port (16 pins at same time) 
