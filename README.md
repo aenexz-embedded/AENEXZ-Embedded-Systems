@@ -1,4 +1,4 @@
-# AENEXZ Embedded Systems (July 2026 Batch)
+# AENEXZ Embedded Systems
 
 Welcome! This repo is where all session submissions live for the duration of
 the internship. All work happens on the **`batch/july-2026`** branch — this
