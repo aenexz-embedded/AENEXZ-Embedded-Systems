@@ -1,0 +1,22 @@
+1. RCC -> APB2ENR:
+RCC stands for Reset and Clock Control register. It is the peripheral in charge of turning the clocks on/off. APB2ENR is a register inside RCC called the APB2 peripheral clock Enable Register. Each bit in it corresponds to a certain peripheral. Setting it to 1 "turns on" the clock for that peripheral.
+
+2.GPIOC -> CRH:
+GPIOC refers to General Purpose Input/Output, Port C. STM32 chips group their pins into ports (A, B, C, D ...), each with upto 16 pins. CRH stands for Configuration Register High, while Configuration Register Low.
+
+3.GPIOC -> ODR:
+ODR stands for Output Data Register which control the output logic level of each of its 16-bit pins - bit 13 controls PC13's output state.
+
+
+Bit Manipulation Exercise:
+//Set a bit at position n of a register REG
+REG |= (1 << n); // 1<<n shifts a 1 into position n of the register (e.g. 1<<3 = 0b1000). OR-ing (|=) that into REG forces bit n to 1 while leaving every other bit untouched.
+
+//Clear a bit at position n of a register REG
+REG &= ~(1<<n); // ~(1 << n) inverts the mask, turning it into all 1s except a 0 at the position n (e.g. ~0b1000 = ...1110111. AND-ing (&=) that with REG forces bit n to 0 while leaving other bits untouched.
+
+//Toggle a bit at position n of a register REG
+REG ^= (1 << n); //XOR-ing (^=) with 1 flips it, and XOR-ing a bit with 0 leaves it unchanged. Since the mask only has a 1 at postion n, only that bit flips-everything else stays untouched.
+
+//Read a bit at position n of a register REG
+bit_value = (REG >> n) & 1; //REG >> n shifts bit n all the way down to position 0. AND-ing with 1 then masks off everything else, leaving just that single bit's value (0 or 1) to read/check.
