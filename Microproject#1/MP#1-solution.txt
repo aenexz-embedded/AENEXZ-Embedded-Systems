@@ -1,1 +1,40 @@
-//will be added after session 4
+Functional Requirements
+
+InputExpected BehaviorLeft button (B14)Shifts the active bit one position left in the logical register (e.g., 00000001 → 00000010, meaning the LED on A6 turns on)Right button (B15)Shifts the active bit one position right in the logical register (wraps around)Idle (no press)LED state remains unchanged
+
+
+///////////////SOLUTION/////////////////////////////////////////////////////////////////////////
+/* USER CODE BEGIN PV */
+uint8_t ledState = 0x80;   // initial state: A7 (LSB) HIGH -> physical bit7
+/* USER CODE END PV */
+
+/* USER CODE BEGIN 2 */
+// (goes after MX_GPIO_Init() call in main())
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|
+                          GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);   // A7 = LSB = HIGH
+/* USER CODE END 2 */
+
+/* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if (GPIO_Pin == GPIO_PIN_14)        // Left button
+    {
+        ledState = (ledState >> 1) | (ledState << 7);   // physical right-shift, wraps
+    }
+    else if (GPIO_Pin == GPIO_PIN_15)   // Right button
+    {
+        ledState = (ledState << 1) | (ledState >> 7);   // physical left-shift, wraps
+    }
+    else
+    {
+        return;   // not our pin, ignore
+    }
+
+    for (uint8_t i = 0; i < 8; i++)
+    {
+        HAL_GPIO_WritePin(GPIOA, (1 << i),
+            (ledState & (1 << i)) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    }
+}
+/* USER CODE END 4 */
