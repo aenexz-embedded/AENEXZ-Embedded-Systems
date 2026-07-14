@@ -1,9 +1,0 @@
-Problem Statement
-Write bare metal C code to alternately blink two LEDs connected to pins PA1 and PB14 of BluePill, with a toggle interval of 500ms.
-Requirements:
-- When PA1's LED is ON, PB14's LED must be OFF, and vice versa, the two must never be on (or off) at the same time.
-- Use direct register writes only.
-- Clock-enable bits and GPIO addresses for both ports must be located in the Reference Manual, not copy-pasted.
-
-
-  //Solution will be added after session 3
