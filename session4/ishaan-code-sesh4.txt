@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+int extractNibble(unsigned char reg, int pos) {
+    unsigned char reg1 = reg;
+    int pos1 = pos;
+    
+    if(pos1 == 0) {
+        reg1 = reg1 & 0x0F;
+    }
+    else{
+        reg1 = (reg1 >> 4) & 0x0F;
+    }
+    
+    return reg1;
+}
+
+
+int main()
+{
+    unsigned char reg;
+    int pos;
+    reg = 0xFF;
+    pos = 0;
+    printf("%d", extractNibble(reg, pos));
+
+    return 0;
+}

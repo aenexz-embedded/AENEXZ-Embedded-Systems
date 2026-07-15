@@ -1,0 +1,37 @@
+Problem Statement
+Write bare metal C code to alternately blink two LEDs connected to pins PA1 and PB14 of BluePill, with a toggle interval of 500ms.
+Requirements:
+- When PA1's LED is ON, PB14's LED must be OFF, and vice versa, the two must never be on (or off) at the same time.
+- Use direct register writes only.
+- Clock-enable bits and GPIO addresses for both ports must be located in the Reference Manual, not copy-pasted.
+
+#include "stm32f1xx.h"
+
+void delay(volatile uint32_t count)
+{
+    while (count--);
+}
+
+int main(void)
+{
+    // Enable clock for GPIOC
+    RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;
+    RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+
+    // Configure A1 as output, push-pull, 2MHz (MODE13_1 = 10: output mode, max 2MHz)
+    GPIOA->CRL &= ~(GPIO_CRL_MODE1 | GPIO_CRL_CNF1);
+    GPIOA->CRL |= GPIO_CRL_MODE1_1;
+
+    // Configure B14 as output, push-pull, 2MHz (MODE13_1 = 10: output mode, max 2MHz)
+    GPIOB->CRH &= ~(GPIO_CRH_MODE14 | GPIO_CRH_CNF14);
+    GPIOB->CRH |= GPIO_CRH_MODE14_1;
+
+    GPIOB->ODR |= GPIO_ODR_ODR14;
+
+    while (1)
+    {
+        GPIOA->ODR ^= GPIO_ODR_ODR1;   // Toggle pin value
+        GPIOB->ODR ^= GPIO_ODR_ODR14;
+        delay(100000);                  // crude delay
+    }
+}

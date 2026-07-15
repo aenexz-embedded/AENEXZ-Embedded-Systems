@@ -1,0 +1,16 @@
+1. RCC-APB2ENR
+   What does it do? What is the APB2 bus?
+=> Enables clock for a peripheral (off by default to save power). APB2 = high-speed bus (GPIO, ADC, USART1, etc).
+
+2. GPIO-> CRH
+   What is GPIOC? Why spilt into CRH/CRL ?
+=>Configures Port C pins. 16 pins need more bits than one 32-bit register can hold, so it's split into CRL (pins 0–7) and CRH (pins 8–15).
+
+3. GPIO->ODR
+   What does this register represent ?
+=>Output register; each bit sets the output level (HIGH/LOW) of the corresponding pin.
+
+REG |= (1 << n);  =>  Set
+REG &= ~(1 << n); =>  Clear
+REG ^= (1 << n);  =>  Toggle
+(REG >> n) & 1    =>  Read

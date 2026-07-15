@@ -1,0 +1,9 @@
+**NVIC Research Questions — Answer Key**
+
+**Q1.** Preemption priority controls nesting (can this ISR interrupt another running ISR); sub-priority breaks ties between simultaneously pending interrupts of equal preemption priority. Both come from 4 priority bits total, split via the PRIGROUP field in AIRCR — the split ratio (e.g., 4:0, 3:1, 2:2) is configurable.
+
+**Q2.** `HAL_NVIC_EnableIRQ()` → CMSIS `NVIC_EnableIRQ()` → writes a single bit to `NVIC_ISER[n]` (Interrupt Set-Enable Register), where n and bit position are derived from the IRQ number. Note: F103C8 only uses ISER[0]/[1] in practice, not the full architectural ISER[0-7].
+
+**Q3.** Sub-priority breaks the tie first. If sub-priority is also equal, the lower IRQ number wins as the final tiebreaker (implementation-defined, but standard on Cortex-M3).
+
+**Q4.** Pending = triggered, waiting to execute, tracked in `NVIC_ISPR` (Interrupt Set-Pending Register). Active = ISR currently executing, tracked in `NVIC_IABR` (Interrupt Active Bit Register). An interrupt can be pending+active simultaneously if a higher-priority interrupt preempts it mid-execution.

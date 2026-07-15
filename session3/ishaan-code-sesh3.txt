@@ -1,0 +1,17 @@
+Q1) What is the difference between preemption priority and sub-priority on Cortex-M3, and how does priority grouping split the 4 priority bits between them?
+
+A1) i) In Cortex-M3, priority is divided into two : Preemption priority and Sub-priority. Preemption priority governs nesting, meaning it looks into whether an ISR can be interrupted by another based on its preemption priority value. Sub-priority works among multiple interrupts of equal preemption priority that are pending simultaneously. 
+    ii) On Cortex-M3, most implementations use 4 priority bits (giving 16 priority levels, 0–15, where 0 is the highest priority). How these 4 bits are divided between preemption priority and sub-priority is controlled by the PRIGROUP field in the AIRCR (Application Interrupt and Reset Control Register).
+
+Q2) What register does HAL_NVIC_EnableIRQ() actually write to?
+
+A2) HAL_NVIC_EnableIRQ() is a wrapper function that internally calls the CMSIS function NVIC_EnableIRQ(), which writes to the NVIC_ISER (Interrupt Set-Enable Register). Since Cortex-M3 supports up to 240 interrupts, NVIC_ISER is implemented as an array of 32-bit registers (ISER[0] to ISER[7]), where each register controls 32 interrupts. In short, HAL_NVIC_EnableIRQ() ultimately writes a single bit to NVIC_ISER[n], where n and the bit position are calculated from the IRQ number, to enable that specific interrupt in the NVIC.
+
+Q3) If two interrupts are pending at the exact same priority, what decides which one runs first?
+
+A3) Sub-priority determines the priority of an interrupt when interrupts of the same priority are pending in a queue.
+
+Q4) What is the difference between an interrupt being "pending" versus "active" in NVIC terms?
+
+A4) An interrupt is pending when it has been triggered (by hardware or software) and is waiting to be serviced, but the CPU hasn't started executing its handler yet. The pending status is tracked in the NVIC_ISPR (Interrupt Set-Pending Register).
+An interrupt is active when its handler is currently executing (i.e., the CPU has jumped to the ISR and is running the code).
