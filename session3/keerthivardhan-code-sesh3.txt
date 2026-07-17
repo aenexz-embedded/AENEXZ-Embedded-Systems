@@ -1,0 +1,65 @@
+1. What is the difference between preemption priority and sub-priority on Cortex-M3, and how does priority grouping split the 4 priority bits between them?
+Preemption Priority determines whether one interrupt can interrupt (preempt) another interrupt that is currently executing.
+Lower numerical value = Higher priority.
+Example: Priority 0 can interrupt Priority 1.
+Sub-Priority is used when two pending interrupts have the same preemption priority.
+It decides which interrupt executes first after the CPU is free.
+It does not allow one interrupt to interrupt another.
+Priority Grouping
+
+On STM32 Cortex-M3, 4 priority bits are available. These bits are divided between preemption priority and sub-priority using priority grouping.
+
+Example:
+
+
+For example, Group 2 allocates:
+
+2 bits for preemption priority (4 levels)
+2 bits for sub-priority (4 levels)
+
+2. What register does HAL_NVIC_EnableIRQ() actually write to?
+
+HAL_NVIC_EnableIRQ() ultimately enables an interrupt by writing to the NVIC Interrupt Set-Enable Register (ISER).
+
+Internally, it calls:
+
+NVIC_EnableIRQ(IRQn);
+
+which writes to:
+
+NVIC->ISER[n]
+
+where ISER stands for Interrupt Set-Enable Register.
+
+Writing a '1' to the corresponding bit enables that interrupt.
+
+3. If two interrupts are pending at the exact same priority, what decides which one runs first?
+
+If two interrupts have:
+
+the same preemption priority, and
+the same sub-priority,
+
+then the NVIC chooses the interrupt with the lower IRQ number (interrupt number).
+
+Thus, the execution order is:
+
+Higher preemption priority
+Lower sub-priority
+Lower IRQ number (hardware tie-breaker)
+
+4. What is the difference between an interrupt being "pending" versus "active" in NVIC terms?
+Pending
+An interrupt request has occurred.
+The interrupt is waiting to be serviced.
+It has not started executing yet.
+Active
+The processor has accepted the interrupt.
+The Interrupt Service Routine (ISR) is currently executing.
+The interrupt remains active until the ISR finishes.
+
+Example:
+
+A timer overflows → the timer interrupt becomes pending.
+When the CPU begins executing the timer ISR, the interrupt becomes active.
+After the ISR returns, the interrupt is no longer active.
