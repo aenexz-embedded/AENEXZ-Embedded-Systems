@@ -1,0 +1,33 @@
+#include "stm32f1xx.h"
+
+void delay(volatile uint32_t count)
+{
+    while (count--);
+}
+
+int main(void)
+{
+    // Enable clock for GPIOC
+    RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;
+
+    RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+
+  
+    GPIOA->CRL &= ~(GPIO_CRL_MODE1 | GPIO_CRL_CNF1);
+    GPIOA->CRL |= GPIO_CRL_MODE1_1;
+
+    GPIOB->CRH &= ~(GPIO_CRH_MODE14 | GPIO_CRH_CNF14);
+    GPIOB->CRH |= GPIO_CRH_MODE14_1;
+
+
+    while (1)
+    {
+        GPIOA->ODR ^= GPIO_ODR_ODR1; 
+        GPIOB->ODR &= ~(GPIO_ODR_ODR14);  
+        delay(500000);                 
+
+        GPIOB->ODR ^= GPIO_ODR_ODR14; 
+        GPIOA->ODR &= ~(GPIO_ODR_ODR1);    
+        delay(500000); 
+    }
+}
