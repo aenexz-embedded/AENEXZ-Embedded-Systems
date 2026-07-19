@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+unsigned char extractNibble(unsigned char reg, int pos)
+{
+    if (pos == 0)
+    {
+        // Lower nibble
+        return reg & 0x0F;
+    }
+    else
+    {
+        // Upper nibble
+        return (reg >> 4) & 0x0F;
+    }
+}
+
+int main()
+{
+    unsigned char reg;
+    int pos;
+
+    printf("Enter register value (hex): ");
+    scanf("%hhx", &reg);
+
+    printf("Enter position (0 = lower, 1 = upper): ");
+    scanf("%d", &pos);
+
+    printf("%d", extractNibble(reg, pos));
+
+    return 0;
+}
