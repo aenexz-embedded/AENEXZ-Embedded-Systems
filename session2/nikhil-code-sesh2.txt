@@ -1,0 +1,42 @@
+#include <stdint.h>
+
+#define RCC_APB2ENR   (*(volatile uint32_t *)0x40021018)
+
+#define GPIOA_CRL     (*(volatile uint32_t *)0x40010800)
+#define GPIOA_ODR     (*(volatile uint32_t *)0x4001080C)
+
+#define GPIOB_CRH     (*(volatile uint32_t *)0x40010C04)
+#define GPIOB_ODR     (*(volatile uint32_t *)0x40010C0C)
+
+void delay(void)
+{
+    for(volatile uint32_t i = 0; i < 500000; i++);
+}
+
+int main(void)
+{
+    // Enable GPIOA and GPIOB clocks
+    RCC_APB2ENR |= (1 << 2);   // IOPAEN
+    RCC_APB2ENR |= (1 << 3);   // IOPBEN
+
+    // PA1 Output Push-Pull, 2 MHz
+    GPIOA_CRL &= ~(0xF << 4);
+    GPIOA_CRL |=  (0x2 << 4);
+
+    // PB14 Output Push-Pull, 2 MHz
+    GPIOB_CRH &= ~(0xF << 24);
+    GPIOB_CRH |=  (0x2 << 24);
+
+    while(1)
+    {
+        // PA1 ON, PB14 OFF
+        GPIOA_ODR |=  (1 << 1);
+        GPIOB_ODR &= ~(1 << 14);
+        delay();
+
+        // PA1 OFF, PB14 ON
+        GPIOA_ODR &= ~(1 << 1);
+        GPIOB_ODR |=  (1 << 14);
+        delay();
+    }
+}
