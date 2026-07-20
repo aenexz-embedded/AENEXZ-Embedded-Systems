@@ -1,0 +1,33 @@
+1. RCC->APB2ENR
+RCC = Reset and Clock Control.
+APB2ENR = APB2 Peripheral Clock Enable Register.
+It turns ON the clock for peripherals connected to the APB2 bus (like GPIOA, GPIOB, GPIOC, ADC, etc.).
+A peripheral will not work unless its clock is enabled.
+
+Example:
+RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
+
+Enables the clock for GPIOC.
+
+APB2 Bus:
+A high-speed internal bus that connects the CPU to fast peripherals (GPIO, ADC, TIM1, USART1, etc.).
+
+2. GPIOC->CRH
+GPIOC = General Purpose Input/Output Port C.
+CRH = Configuration Register High.
+It configures pins PC8 to PC15.
+
+Why two registers?
+
+CRL → Configures PC0–PC7
+CRH → Configures PC8–PC15
+
+Configures PC13 as an output.
+
+3. GPIOC->ODR
+ODR = Output Data Register.
+It stores the output value of GPIO pins.
+Writing 1 makes the pin HIGH.
+Writing 0 makes the pin LOW.
+
+
