@@ -1,0 +1,19 @@
+1. What is the difference between preemption priority and sub-priority on Cortex-M3, and how does priority grouping split the 4 priority bits between them?
+
+
+ANS => Preemption priority decides if one interrupt can stop another interrupt that is already running. Sub-priority is used when two interrupts have the same preemption priority. It decides which interrupt runs first. The 4 priority bits are divided between preemption priority and sub-priority, for example, 2 bits each.
+
+2. What register does HAL_NVIC_EnableIRQ() actually write to?
+
+
+ANS =>HAL_NVIC_EnableIRQ() writes to the NVIC Interrupt Set Enable Register (ISER). This register is used to enable the selected interrupt so that the CPU can respond when it occurs.
+
+3. If two interrupts are pending at the exact same priority, what decides which one runs first?
+
+
+ANS =>If both interrupts have the same priority, the interrupt with the lower interrupt number (IRQ number) runs first. This is decided by the NVIC hardware.
+
+4. What is the difference between an interrupt being "pending" versus "active" in NVIC terms?
+
+
+ANS =>A pending interrupt means the interrupt has happened and is waiting for the CPU to handle it. An active interrupt means the CPU is currently executing that interrupt's service routine (ISR).
